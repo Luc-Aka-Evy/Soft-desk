@@ -4,13 +4,11 @@ from django.conf import settings
 # Create your models here.
 class Projects(models.Model):
 
-    project_id = models.IntegerField()
     title = models.CharField(max_length=128)
     description = models.CharField(max_length=2048)
     type = models.CharField(max_length=255)
     author_user_id = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    contributors = models.ManyToManyField(settings.AUTH_USER_MODEL, through='Contributors', related_name='contributions')
-
+    
 
 class Issues(models.Model):
 
@@ -20,18 +18,19 @@ class Issues(models.Model):
     priority = models.CharField(max_length=128)
     project_id = models.IntegerField()
     status = models.CharField(max_length=128)
-    author_user_id = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    assignee_user_id = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    author_user_id = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='author')
+    assignee_user_id = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='assigne')
     created_time = models.DateTimeField(auto_now_add=True)
     
 
-
 class Contributors(models.Model):
 
-    user_id = models.IntegerField()
-    project_id = models.IntegerField()
-    permission = models.Choices()
+    user_id = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    project_id = models.ForeignKey(Projects, on_delete=models.CASCADE)
     role = models.CharField(max_length=128)
+
+    class Meta:
+        unique_together = ('user_id', 'project_id')
 
 
 class Comments(models.Model):
