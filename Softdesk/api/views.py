@@ -1,11 +1,12 @@
 from django.shortcuts import render
-from rest_framework.viewsets import ModelViewSet
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework import generics
+from django.shortcuts import get_object_or_404
 from api.models import Projects, Contributors, Issues, Comments
 from api.serializers import ProjectsSerializer, CommentsSerializer, ContributorsSerializer, IssuesSerializer
 from api.permissions import IsAuthor, IsContributor
-from authentication.models import User
 
 # Create your views here.
 
@@ -30,9 +31,30 @@ class ProjectsViewset(MultipleSerializerMixin, ModelViewSet):
     detail_serializer_class = ProjectsSerializer
     permission_classes = [IsAuthor]
  
-    def get_queryset(self):
-        return Projects.objects.all()
+    def get_queryset(self,):
+        return Projects.objects.filter(author_user_id=self.request.user.id)
 
+    @action(methods=['get'], detail=True,)
+    def users(self, request, pk=None):
+        """
+        Returns a list of all the users working on the project
+        """
+
+        project = self.get_object()
+        queryset = Contributors.objects.filter(project_id=project)
+        serializer = ContributorsSerializer(queryset, many=True)
+        return Response(serializer.data)
+
+    @action(methods=['get'], detail=True,)
+    def issues(self, request, pk=None):
+        """
+        Returns a list of all the issues in the project
+        """
+
+        project = self.get_object()
+        queryset = Issues.objects.filter(project_id=project)
+        serializer = IssuesSerializer(queryset, many=True)
+        return Response(serializer.data)
 
 class ContributorsViewset(MultipleSerializerMixin, ModelViewSet):
 

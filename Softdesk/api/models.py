@@ -16,7 +16,7 @@ class Issues(models.Model):
     description = models.CharField(max_length=2048)
     tag = models.CharField(max_length=128)
     priority = models.CharField(max_length=128)
-    project_id = models.IntegerField()
+    project_id = models.ForeignKey(Projects, on_delete=models.CASCADE)
     status = models.CharField(max_length=128)
     author_user_id = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='author')
     assignee_user_id = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='assigne')
@@ -35,7 +35,6 @@ class Contributors(models.Model):
 
 class Comments(models.Model):
 
-    comment_id = models.IntegerField()
     description = models.CharField(max_length=2048)
     author_user_id = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     issue_id = models.ForeignKey(Issues, on_delete=models.CASCADE)

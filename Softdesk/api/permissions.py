@@ -14,10 +14,10 @@ class IsUser(permissions.BasePermission):
         if request.user.is_superuser:
             return True
 
-        if request.method in permissions.SAFE_METHODS:
+        if obj.id == request.user.id:
             return True
 
-        if obj.id == request.user:
+        if request.method in permissions.SAFE_METHODS:
             return True
 
         if request.user.is_staff and request.method not in self.edit_methods:
@@ -67,7 +67,11 @@ class IsContributor(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
 
+
         if obj.user_id == request.user.id:
+            return True
+
+        if obj.project_id.author_user_id == request.user.id:
             return True
 
         if request.user.is_staff and request.method not in self.edit_methods:
