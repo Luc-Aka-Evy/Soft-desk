@@ -7,47 +7,78 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Comments',
+            name="Comments",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('comment_id', models.IntegerField()),
-                ('description', models.CharField(max_length=2048)),
-                ('created_time', models.DateTimeField(auto_now_add=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("comment_id", models.IntegerField()),
+                ("description", models.CharField(max_length=2048)),
+                ("created_time", models.DateTimeField(auto_now_add=True)),
             ],
         ),
         migrations.CreateModel(
-            name='Contributors',
+            name="Contributors",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('role', models.CharField(max_length=128)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("role", models.CharField(max_length=128)),
             ],
         ),
         migrations.CreateModel(
-            name='Issues',
+            name="Issues",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('title', models.CharField(max_length=128)),
-                ('description', models.CharField(max_length=2048)),
-                ('tag', models.CharField(max_length=128)),
-                ('priority', models.CharField(max_length=128)),
-                ('project_id', models.IntegerField()),
-                ('status', models.CharField(max_length=128)),
-                ('created_time', models.DateTimeField(auto_now_add=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("title", models.CharField(max_length=128)),
+                ("description", models.CharField(max_length=2048)),
+                ("tag", models.CharField(max_length=128)),
+                ("priority", models.CharField(max_length=128)),
+                ("project_id", models.IntegerField()),
+                ("status", models.CharField(max_length=128)),
+                ("created_time", models.DateTimeField(auto_now_add=True)),
             ],
         ),
         migrations.CreateModel(
-            name='Projects',
+            name="Projects",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('project_id', models.IntegerField()),
-                ('title', models.CharField(max_length=128)),
-                ('description', models.CharField(max_length=2048)),
-                ('type', models.CharField(max_length=255)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("project_id", models.IntegerField()),
+                ("title", models.CharField(max_length=128)),
+                ("description", models.CharField(max_length=2048)),
+                ("type", models.CharField(max_length=255)),
             ],
         ),
     ]

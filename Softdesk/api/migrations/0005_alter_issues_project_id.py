@@ -7,13 +7,15 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('api', '0004_remove_comments_comment_id'),
+        ("api", "0004_remove_comments_comment_id"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='issues',
-            name='project_id',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='api.projects'),
+            model_name="issues",
+            name="project_id",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="api.projects"
+            ),
         ),
     ]

@@ -11,47 +11,65 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('api', '0001_initial'),
+        ("api", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='projects',
-            name='author_user_id',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="projects",
+            name="author_user_id",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL
+            ),
         ),
         migrations.AddField(
-            model_name='issues',
-            name='assignee_user_id',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='assigne', to=settings.AUTH_USER_MODEL),
+            model_name="issues",
+            name="assignee_user_id",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="assigne",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AddField(
-            model_name='issues',
-            name='author_user_id',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='author', to=settings.AUTH_USER_MODEL),
+            model_name="issues",
+            name="author_user_id",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="author",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AddField(
-            model_name='contributors',
-            name='project_id',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='api.projects'),
+            model_name="contributors",
+            name="project_id",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="api.projects"
+            ),
         ),
         migrations.AddField(
-            model_name='contributors',
-            name='user_id',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="contributors",
+            name="user_id",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL
+            ),
         ),
         migrations.AddField(
-            model_name='comments',
-            name='author_user_id',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="comments",
+            name="author_user_id",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL
+            ),
         ),
         migrations.AddField(
-            model_name='comments',
-            name='issue_id',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='api.issues'),
+            model_name="comments",
+            name="issue_id",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="api.issues"
+            ),
         ),
         migrations.AlterUniqueTogether(
-            name='contributors',
-            unique_together={('user_id', 'project_id')},
+            name="contributors",
+            unique_together={("user_id", "project_id")},
         ),
     ]

@@ -10,11 +10,12 @@ from api.permissions import IsUser
 
 # Create your views here.
 
+
 class UserViewset(ModelViewSet):
 
     serializer_class = UserSerializer
     permission_classes = [IsUser]
-    http_method_names = ['get', 'put', 'head', 'patch', 'delete']
+    http_method_names = ["get", "put", "head", "patch", "delete"]
 
     def get_queryset(self):
         return User.objects.all()
@@ -23,5 +24,4 @@ class UserViewset(ModelViewSet):
 class UserCreate(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    permission_classes = (AllowAny, )
-
+    permission_classes = (AllowAny,)
