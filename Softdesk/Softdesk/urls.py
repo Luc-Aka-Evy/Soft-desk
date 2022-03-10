@@ -23,13 +23,25 @@ from api.views import (
     ContributorsViewset,
     IssuesViewset,
     CommentsViewset,
+    AdminCommentsViewset,
+    AdminContributorsViewset,
+    AdminIssuesViewset,
+    AdminProjectsViewset,
 )
 from authentication.views import UserViewset, UserCreate
 
 router = routers.SimpleRouter()
+admin_router = routers.SimpleRouter()
+
+admin_router.register("admin-users", UserViewset, basename="users")
+admin_router.register("admin-projects", AdminProjectsViewset, basename="all-projects")
+admin_router.register(
+    "admin-contributors", AdminContributorsViewset, basename="all-contributors"
+)
+admin_router.register("admin-issues", AdminIssuesViewset, basename="all-issues")
+admin_router.register("admin-comments", AdminCommentsViewset, basename="all-comments")
 
 router.register("projects", ProjectsViewset, basename="projects")
-router.register("users", UserViewset, basename="users")
 router.register("issues", IssuesViewset, basename="issues")
 
 projects_router = routers.NestedSimpleRouter(router, "projects", lookup="projects")
@@ -42,6 +54,7 @@ issues_router.register("comments", CommentsViewset, basename="comments")
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("api-auth/", include("rest_framework.urls")),
+    path("api/", include(admin_router.urls)),
     path("api/", include(router.urls)),
     path("api/", include(projects_router.urls)),
     path("api/", include(issues_router.urls)),

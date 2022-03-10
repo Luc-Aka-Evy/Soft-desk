@@ -1,6 +1,12 @@
 from rest_framework import permissions
 
 
+class IsAdminUser(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.user.is_superuser:
+            return True
+
+
 class IsUser(permissions.BasePermission):
 
     edit_methods = ("PUT", "PATCH")
@@ -40,7 +46,7 @@ class IsAuthor(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
 
-        if obj.author_user_id == request.user:
+        if obj.author == request.user:
             return True
 
         if request.user.is_staff and request.method not in self.edit_methods:
@@ -64,10 +70,7 @@ class IsContributor(permissions.BasePermission):
         if request.method in permissions.SAFE_METHODS:
             return True
 
-        if obj.user_id == request.user.id:
-            return True
-
-        if obj.project_id.author_user_id == request.user.id:
+        if obj.project.author == request.user:
             return True
 
         if request.user.is_staff and request.method not in self.edit_methods:

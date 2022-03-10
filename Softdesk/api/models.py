@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from authentication.models import User
 
 # Create your models here.
 class Projects(models.Model):
@@ -7,9 +8,7 @@ class Projects(models.Model):
     title = models.CharField(max_length=128)
     description = models.CharField(max_length=2048)
     type = models.CharField(max_length=255)
-    author_user_id = models.ForeignKey(
-        to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE
-    )
+    author = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
 
 class Issues(models.Model):
@@ -18,12 +17,12 @@ class Issues(models.Model):
     description = models.CharField(max_length=2048)
     tag = models.CharField(max_length=128)
     priority = models.CharField(max_length=128)
-    project_id = models.ForeignKey(Projects, on_delete=models.CASCADE)
+    project = models.ForeignKey(Projects, on_delete=models.CASCADE)
     status = models.CharField(max_length=128)
-    author_user_id = models.ForeignKey(
+    author = models.ForeignKey(
         to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="author"
     )
-    assignee_user_id = models.ForeignKey(
+    assignee = models.ForeignKey(
         to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="assigne"
     )
     created_time = models.DateTimeField(auto_now_add=True)
@@ -31,19 +30,17 @@ class Issues(models.Model):
 
 class Contributors(models.Model):
 
-    user_id = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    project_id = models.ForeignKey(Projects, on_delete=models.CASCADE)
+    user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    project = models.ForeignKey(Projects, on_delete=models.CASCADE)
     role = models.CharField(max_length=128)
 
     class Meta:
-        unique_together = ("user_id", "project_id")
+        unique_together = ("user", "project")
 
 
 class Comments(models.Model):
 
     description = models.CharField(max_length=2048)
-    author_user_id = models.ForeignKey(
-        to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE
-    )
-    issue_id = models.ForeignKey(Issues, on_delete=models.CASCADE)
+    author = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    issue = models.ForeignKey(Issues, on_delete=models.CASCADE)
     created_time = models.DateTimeField(auto_now_add=True)
