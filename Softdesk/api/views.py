@@ -10,7 +10,7 @@ from api.serializers import (
     IssuesSerializer,
     IssuesDetailSerializer,
 )
-from api.permissions import IsAuthor, IsContributor, IsAdminUser
+from api.permissions import IsAuthor, IsContributor, IsAdminUser, IsOwner
 
 # Create your views here.
 
@@ -44,7 +44,7 @@ class ContributorsViewset(MultipleSerializerMixin, ModelViewSet):
 
     detail_serializer_class = ContributorsDetailSerializer
     serializer_class = ContributorsSerializer
-    permission_classes = [IsContributor]
+    permission_classes = [IsOwner]
 
     def get_queryset(self):
         return Contributors.objects.filter(project=self.kwargs["projects_pk"])
@@ -54,7 +54,7 @@ class IssuesViewset(MultipleSerializerMixin, ModelViewSet):
 
     detail_serializer_class = IssuesDetailSerializer
     serializer_class = IssuesSerializer
-    permission_classes = [IsAuthor]
+    permission_classes = [IsContributor]
 
     def get_queryset(self):
         return Issues.objects.filter(project=self.kwargs["projects_pk"])

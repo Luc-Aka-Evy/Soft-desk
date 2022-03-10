@@ -33,6 +33,7 @@ from authentication.views import UserViewset, UserCreate
 router = routers.SimpleRouter()
 admin_router = routers.SimpleRouter()
 
+#admin routers to all objects of one category
 admin_router.register("admin-users", UserViewset, basename="users")
 admin_router.register("admin-projects", AdminProjectsViewset, basename="all-projects")
 admin_router.register(
@@ -41,6 +42,7 @@ admin_router.register(
 admin_router.register("admin-issues", AdminIssuesViewset, basename="all-issues")
 admin_router.register("admin-comments", AdminCommentsViewset, basename="all-comments")
 
+#admin routers for all detail of one specific project (contributors, issues, comments)
 admin_projects_router = routers.NestedSimpleRouter(admin_router, "admin-projects", lookup="projects")
 admin_projects_router.register("users", ContributorsViewset, basename="contributors")
 admin_projects_router.register("issues", IssuesViewset, basename="issues-comments")
@@ -48,6 +50,7 @@ admin_projects_router.register("issues", IssuesViewset, basename="issues-comment
 admin_issues_router = routers.NestedSimpleRouter(admin_projects_router, "issues", lookup="issues")
 admin_issues_router.register("comments", CommentsViewset, basename="comments")
 
+#the same routers as admin but just for regular authenticade user
 router.register("projects", ProjectsViewset, basename="projects")
 router.register("issues", IssuesViewset, basename="issues")
 
