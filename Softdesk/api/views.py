@@ -1,4 +1,5 @@
 from rest_framework.viewsets import ModelViewSet
+from rest_framework.permissions import DjangoModelPermissions
 from api.models import Projects, Contributors, Issues, Comments
 from api.serializers import (
     ProjectsSerializer,

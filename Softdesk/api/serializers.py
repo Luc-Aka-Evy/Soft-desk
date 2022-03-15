@@ -63,6 +63,17 @@ class ContributorsSerializer(serializers.ModelSerializer):
         validated_data["user"] = contributor
         return Contributors.objects.create(**validated_data)
 
+    def validate(self, validated_data):
+        project = Projects.objects.get(pk=self.context["view"].kwargs["projects_pk"])
+        if Contributors.objects.filter(
+            user=User.objects.get(username=validated_data["user"]), project=project
+        ).exists():
+            raise serializers.ValidationError("This user is a contributor already.")
+
+    def validate_user(self, value):
+        if not User.objects.filter(username=value).exists():
+            raise serializers.ValidationError("There is no user with this username")
+
 
 class ContributorsDetailSerializer(serializers.ModelSerializer):
 
@@ -117,6 +128,29 @@ class IssuesSerializer(serializers.ModelSerializer):
         """Include default for read_only `user` field"""
         kwargs["author"] = self.fields["author"].get_default()
         return super().save(**kwargs)
+
+    def validate_title(self, value):
+        project = Projects.objects.get(pk=self.context["view"].kwargs["projects_pk"])
+        if Issues.objects.filter(title=value, project=project).exists():
+            raise serializers.ValidationError(
+                "An issue with this title already exists for this project"
+            )
+
+    def validate_description(self, value):
+        project = Projects.objects.get(pk=self.context["view"].kwargs["projects_pk"])
+        if Issues.objects.filter(description=value, project=project).exists():
+            raise serializers.ValidationError(
+                "An issue with this description already exists for this project"
+            )
+
+    def validate_assignee(self, value):
+        project = Projects.objects.get(pk=self.context["view"].kwargs["projects_pk"])
+        if not Contributors.objects.filter(
+            user=User.objects.get(username=value), project=project
+        ).exists():
+            raise serializers.ValidationError(
+                "This user is not a contributor of this project (change or add user in the contributors)."
+            )
 
 
 class IssuesDetailSerializer(serializers.ModelSerializer):
