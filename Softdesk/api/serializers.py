@@ -59,20 +59,22 @@ class ContributorsSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         project = Projects.objects.get(pk=self.context["view"].kwargs["projects_pk"])
         validated_data["project"] = project
-        contributor = User.objects.get(username=validated_data["user"])
-        validated_data["user"] = contributor
         return Contributors.objects.create(**validated_data)
 
-    def validate(self, validated_data):
+
+    def validate_user(self, value):
         project = Projects.objects.get(pk=self.context["view"].kwargs["projects_pk"])
+        if not User.objects.filter(username=value).exists():
+            raise serializers.ValidationError("There is no user with this username")
+        
         if Contributors.objects.filter(
-            user=User.objects.get(username=validated_data["user"]), project=project
+            user=User.objects.get(username=value), project=project
         ).exists():
             raise serializers.ValidationError("This user is a contributor already.")
 
-    def validate_user(self, value):
-        if not User.objects.filter(username=value).exists():
-            raise serializers.ValidationError("There is no user with this username")
+        if User.objects.filter(username=value).exists():
+            return User.objects.get(username=value)
+
 
 
 class ContributorsDetailSerializer(serializers.ModelSerializer):

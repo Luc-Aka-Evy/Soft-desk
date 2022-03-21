@@ -11,7 +11,7 @@ from api.serializers import (
     IssuesSerializer,
     IssuesDetailSerializer,
 )
-from api.permissions import IsAuthor, IsContributor, IsAdminUser, IsOwner
+from api.permissions import IsAuthor, IsContributor, IsAdminUser, IsOwner, IsCreator
 
 # Create your views here.
 
@@ -35,7 +35,7 @@ class ProjectsViewset(MultipleSerializerMixin, ModelViewSet):
 
     detail_serializer_class = ProjectsDetailSerializer
     serializer_class = ProjectsSerializer
-    permission_classes = [IsAuthor]
+    permission_classes = [IsCreator]
 
     def get_queryset(self):
         return Projects.objects.filter(author=self.request.user)
