@@ -17,7 +17,7 @@ class IsUser(permissions.BasePermission):
 
     def has_permission(self, request, view):
         user = User.objects.get(pk=view.kwargs["user_pk"])
-        
+
         if user == request.user:
             return True
 
@@ -64,20 +64,23 @@ class IsCreator(permissions.BasePermission):
         if request.user.is_staff and request.method not in self.edit_methods:
             return True
 
+
 class IsAuthor(permissions.BasePermission):
 
     edit_methods = ("PUT", "PATCH")
 
     def has_permission(self, request, view):
         issue = Issues.objects.get(pk=view.kwargs["issues_pk"])
-        
+
         if request.user.is_superuser:
             return True
 
         if issue.project.author == request.user:
             return True
 
-        if Contributors.objects.filter(user=request.user, project=issue.project).exists():
+        if Contributors.objects.filter(
+            user=request.user, project=issue.project
+        ).exists():
             return True
 
     def has_object_permission(self, request, view, obj):
@@ -99,16 +102,23 @@ class IsAuthor(permissions.BasePermission):
 class IsOwner(permissions.BasePermission):
 
     edit_methods = ("PUT", "PATCH")
+    view_method = "GET"
 
     def has_permission(self, request, view):
         project = Projects.objects.get(pk=view.kwargs["projects_pk"])
-        
+
         if project.author == request.user:
             return True
 
         if request.user.is_superuser:
             return True
-        
+
+        if (
+            Contributors.objects.filter(user=request.user, project=project).exists()
+            and request.method in self.view_method
+        ):
+            return True
+
     def has_object_permission(self, request, view, obj):
         if request.user.is_superuser:
             return True
@@ -126,13 +136,17 @@ class IsOwner(permissions.BasePermission):
 class IsContributor(permissions.BasePermission):
 
     edit_methods = ("PUT", "PATCH")
+    view_method = "GET"
 
     def has_permission(self, request, view):
         project = Projects.objects.get(pk=view.kwargs["projects_pk"])
         if project.author == request.user:
             return True
-        
-        if Contributors.objects.filter(user=request.user, project=project).exists():
+
+        if (
+            Contributors.objects.filter(user=request.user, project=project).exists()
+            and request.method in self.view_method
+        ):
             return True
 
         if request.user.is_superuser:

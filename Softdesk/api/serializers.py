@@ -25,13 +25,6 @@ class ProjectsSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Title already exists")
         return value
 
-    def validate_description(self, value):
-        if Projects.objects.filter(description=value).exists():
-            raise serializers.ValidationError(
-                "There is a project with the same description please change it"
-            )
-        return value
-
 
 class ProjectsDetailSerializer(serializers.ModelSerializer):
 
@@ -61,12 +54,11 @@ class ContributorsSerializer(serializers.ModelSerializer):
         validated_data["project"] = project
         return Contributors.objects.create(**validated_data)
 
-
     def validate_user(self, value):
         project = Projects.objects.get(pk=self.context["view"].kwargs["projects_pk"])
         if not User.objects.filter(username=value).exists():
             raise serializers.ValidationError("There is no user with this username")
-        
+
         if Contributors.objects.filter(
             user=User.objects.get(username=value), project=project
         ).exists():
@@ -74,7 +66,6 @@ class ContributorsSerializer(serializers.ModelSerializer):
 
         if User.objects.filter(username=value).exists():
             return User.objects.get(username=value)
-
 
 
 class ContributorsDetailSerializer(serializers.ModelSerializer):
@@ -136,13 +127,6 @@ class IssuesSerializer(serializers.ModelSerializer):
         if Issues.objects.filter(title=value, project=project).exists():
             raise serializers.ValidationError(
                 "An issue with this title already exists for this project"
-            )
-
-    def validate_description(self, value):
-        project = Projects.objects.get(pk=self.context["view"].kwargs["projects_pk"])
-        if Issues.objects.filter(description=value, project=project).exists():
-            raise serializers.ValidationError(
-                "An issue with this description already exists for this project"
             )
 
     def validate_assignee(self, value):

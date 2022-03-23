@@ -1,5 +1,5 @@
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.permissions import DjangoModelPermissions
+from django.db.models import Q
 from api.models import Projects, Contributors, Issues, Comments
 from api.serializers import (
     ProjectsSerializer,
@@ -38,7 +38,12 @@ class ProjectsViewset(MultipleSerializerMixin, ModelViewSet):
     permission_classes = [IsCreator]
 
     def get_queryset(self):
-        return Projects.objects.filter(author=self.request.user)
+        return (
+            Projects.objects.filter(Q(author=self.request.user))
+            | Projects.objects.filter(
+                Q(contributors__in=Contributors.objects.filter(user=self.request.user))
+            )[:5]
+        )
 
 
 class ContributorsViewset(MultipleSerializerMixin, ModelViewSet):
@@ -46,6 +51,7 @@ class ContributorsViewset(MultipleSerializerMixin, ModelViewSet):
     detail_serializer_class = ContributorsDetailSerializer
     serializer_class = ContributorsSerializer
     permission_classes = [IsOwner]
+    http_method_names = ["get", "post", "delete"]
 
     def get_queryset(self):
         return Contributors.objects.filter(project=self.kwargs["projects_pk"])

@@ -10,6 +10,9 @@ class Projects(models.Model):
     type = models.CharField(max_length=255)
     author = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.title
+
 
 class Issues(models.Model):
 
@@ -27,6 +30,9 @@ class Issues(models.Model):
     )
     created_time = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.title
+
 
 class Contributors(models.Model):
 
@@ -36,6 +42,9 @@ class Contributors(models.Model):
 
     class Meta:
         unique_together = ("user", "project")
+
+    def __str__(self):
+        return f"{self.user}, {self.project}"
 
 
 class Comments(models.Model):
