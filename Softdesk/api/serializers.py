@@ -113,8 +113,6 @@ class IssuesSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         project = Projects.objects.get(pk=self.context["view"].kwargs["projects_pk"])
         validated_data["project"] = project
-        assignee = User.objects.get(username=validated_data["assignee"])
-        validated_data["assignee"] = assignee
         return Issues.objects.create(**validated_data)
 
     def save(self, **kwargs):
@@ -128,6 +126,7 @@ class IssuesSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 "An issue with this title already exists for this project"
             )
+        return value
 
     def validate_assignee(self, value):
         project = Projects.objects.get(pk=self.context["view"].kwargs["projects_pk"])
@@ -137,6 +136,9 @@ class IssuesSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 "This user is not a contributor of this project (change or add user in the contributors)."
             )
+
+        if User.objects.filter(username=value).exists():
+            return User.objects.get(username=value)
 
 
 class IssuesDetailSerializer(serializers.ModelSerializer):

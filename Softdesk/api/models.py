@@ -1,6 +1,5 @@
 from django.db import models
 from django.conf import settings
-from authentication.models import User
 
 # Create your models here.
 class Projects(models.Model):
