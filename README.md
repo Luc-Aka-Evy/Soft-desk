@@ -24,5 +24,3 @@ To use this applicaion you need to create an account.
 # How to use
 Soft-desk is a Restful API you have to made requests **(POST, GET, PUT, DELETE°)** to work with it.
 you can find all the type of requests and paths needed to use this API in the documentation.
-
-# Contribution
