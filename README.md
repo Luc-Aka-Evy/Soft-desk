@@ -19,7 +19,7 @@ With Soft-desk you can create any kind of project, add contributors on it and cr
 
 There is 5 models in this application **(User, Projects, Contributors, Issues, Comments)**.
 
-All the fields required to use a requests with this models are in the API documentation.
+All the fields required to use a requests with this models are in the API [documentation](https://documenter.getpostman.com/view/17653278/UVysxFv1)
 
 
 # How to use
@@ -27,4 +27,4 @@ Soft-desk is a Restful API you have to made requests **(POST, GET, PUT, DELETE°
 
 This API use Token authentication to have access token you need to create an account with requests.
 
-you can find all the type of requests and paths needed to use this API in the documentation.
+you can find all the type of requests and paths needed to use this API in the [documentation](https://documenter.getpostman.com/view/17653278/UVysxFv1)
