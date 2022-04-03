@@ -17,7 +17,10 @@ Soft-Desk in an application made to help companies with **issue tracking system 
 # Description
 With Soft-desk you can create any kind of project, add contributors on it and create issues about the project.
 
-there is 5 models in this application **(User, Projects, Contributors, Issues, Comments)**
+There is 5 models in this application **(User, Projects, Contributors, Issues, Comments)**.
+
+All the fields required to use a requests with this models are in the API documentation.
+
 
 # How to use
 Soft-desk is a Restful API you have to made requests **(POST, GET, PUT, DELETE°)** to work with it.
