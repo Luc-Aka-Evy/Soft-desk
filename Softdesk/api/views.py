@@ -36,6 +36,7 @@ class ProjectsViewset(MultipleSerializerMixin, ModelViewSet):
     detail_serializer_class = ProjectsDetailSerializer
     serializer_class = ProjectsSerializer
     permission_classes = [IsCreator]
+    http_method_names = ['get', 'post', 'put', 'delete', 'head', 'options', 'trace']
 
     def get_queryset(self):
         return (
@@ -44,7 +45,8 @@ class ProjectsViewset(MultipleSerializerMixin, ModelViewSet):
                 Q(contributors__in=Contributors.objects.filter(user=self.request.user))
             )[:5]
         )
-
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
 
 class ContributorsViewset(MultipleSerializerMixin, ModelViewSet):
 
@@ -62,20 +64,26 @@ class IssuesViewset(MultipleSerializerMixin, ModelViewSet):
     detail_serializer_class = IssuesDetailSerializer
     serializer_class = IssuesSerializer
     permission_classes = [IsContributor]
+    http_method_names = ['get', 'post', 'put', 'delete', 'head', 'options', 'trace']
 
     def get_queryset(self):
         return Issues.objects.filter(project=self.kwargs["projects_pk"])
 
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
 
 class CommentsViewset(MultipleSerializerMixin, ModelViewSet):
 
     detail_serializer_class = CommentsDetailSerializer
     serializer_class = CommentsSerializer
     permission_classes = [IsAuthor]
+    http_method_names = ['get', 'post', 'put', 'delete', 'head', 'options', 'trace']
 
     def get_queryset(self):
         return Comments.objects.filter(issue=self.kwargs["issues_pk"])
 
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
 
 class AdminProjectsViewset(MultipleSerializerMixin, ModelViewSet):
 

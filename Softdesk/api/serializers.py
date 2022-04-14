@@ -8,17 +8,13 @@ from authentication.serializers import UserSerializer
 class ProjectsSerializer(serializers.ModelSerializer):
 
     author = serializers.PrimaryKeyRelatedField(
-        read_only=True, default=serializers.CurrentUserDefault()
+        read_only=True
     )
 
     class Meta:
         model = Projects
         fields = ["id", "title", "description", "type", "author"]
 
-    def save(self, **kwargs):
-        """Include default for read_only `user` field"""
-        kwargs["author"] = self.fields["author"].get_default()
-        return super().save(**kwargs)
 
     def validate_title(self, value):
         if Projects.objects.filter(title=value).exists():
@@ -91,7 +87,7 @@ class ContributorsDetailSerializer(serializers.ModelSerializer):
 class IssuesSerializer(serializers.ModelSerializer):
 
     author = serializers.PrimaryKeyRelatedField(
-        read_only=True, default=serializers.CurrentUserDefault()
+        read_only=True
     )
     assignee = serializers.CharField(write_only=True)
 
@@ -115,10 +111,6 @@ class IssuesSerializer(serializers.ModelSerializer):
         validated_data["project"] = project
         return Issues.objects.create(**validated_data)
 
-    def save(self, **kwargs):
-        """Include default for read_only `user` field"""
-        kwargs["author"] = self.fields["author"].get_default()
-        return super().save(**kwargs)
 
     def validate_title(self, value):
         project = Projects.objects.get(pk=self.context["view"].kwargs["projects_pk"])
@@ -181,7 +173,7 @@ class IssuesDetailSerializer(serializers.ModelSerializer):
 class CommentsSerializer(serializers.ModelSerializer):
 
     author = serializers.PrimaryKeyRelatedField(
-        read_only=True, default=serializers.CurrentUserDefault()
+        read_only=True
     )
 
     def create(self, validated_data):
@@ -193,11 +185,6 @@ class CommentsSerializer(serializers.ModelSerializer):
         model = Comments
         fields = ["id", "description", "author", "created_time"]
         include = ["issue"]
-
-    def save(self, **kwargs):
-        """Include default for read_only `user` field"""
-        kwargs["author"] = self.fields["author"].get_default()
-        return super().save(**kwargs)
 
 
 class CommentsDetailSerializer(serializers.ModelSerializer):
