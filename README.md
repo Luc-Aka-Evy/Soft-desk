@@ -28,3 +28,7 @@ Soft-desk is a Restful API you have to made requests **(POST, GET, PUT, DELETE°
 This API use Token authentication to have access token you need to create an account with requests.
 
 you can find all the type of requests and paths needed to use this API in the [documentation](https://documenter.getpostman.com/view/17653278/UVysxFv1)
+
+# Contribution
+[Luc Aka-Evy
+](https://github.com/Luc-Aka-Evy)
